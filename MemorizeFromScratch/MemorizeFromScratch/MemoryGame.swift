@@ -86,9 +86,6 @@ struct MemoryGame<CardContent> where CardContent : Equatable {
                 }
                 else {
                     if(cards[potentialMatch!].isAlreadySeen || cards[chosenCard].isAlreadySeen) {
-                        score -= 2
-                    }
-                    else {
                         score -= 1
                     }
                 }
