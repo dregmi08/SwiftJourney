@@ -24,6 +24,7 @@ struct EmojiMemoryGameView: View {
             
             ScrollView {
                 cards
+                    .animation(.default, value: viewModel.cards)
             }
             HStack{
                 Button(action: {
@@ -49,17 +50,16 @@ struct EmojiMemoryGameView: View {
         .font(.system(size: 20, weight: .bold, design: .rounded))
     }
 
-  
     var cards : some View {
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing:0)], spacing:0) {
-            ForEach(viewModel.cards.indices) { index in
-                    CardStruct(viewModel.cards[index])
-                        .aspectRatio(2/3, contentMode: .fill)
-                        .padding(4)
+            ForEach(viewModel.cards) { card in
+                    CardStruct(card)
                         .onTapGesture {
-                            self.viewModel.choose(viewModel.cards[index])
+                                self.viewModel.choose(card)
                         }
-                }
+                } 
+                .aspectRatio(2/3, contentMode: .fill)
+                .padding(4)
         }
     }
         
@@ -118,7 +118,6 @@ func themeColorSetter(_ themeCol: String) -> Color {
         }
     }
 }
-
 
 struct EmojiMemoryGameView_Previews: PreviewProvider {
     static var previews: some View {

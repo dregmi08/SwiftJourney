@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct MemoryGame<CardContent : Equatable> {
+struct MemoryGame<CardContent> where CardContent : Equatable {
     
     
     //what does this thing do
@@ -41,12 +41,11 @@ struct MemoryGame<CardContent : Equatable> {
     
     //choose a card
     
-    struct Card: Equatable, Identifiable {
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         
-        static func ==(lhs: Card, rhs: Card) -> Bool {
-            return lhs.content == rhs.content
+        var debugDescription : String {
+            return "\(content), \(id), \(isFaceUp), \(isMatched), \(isAlreadySeen), \(cardColor)"
         }
-        
         let content: CardContent
         var isFaceUp = false
         var cardColor: String
@@ -59,9 +58,10 @@ struct MemoryGame<CardContent : Equatable> {
         cards.shuffle()
     }
     
+    
     mutating func choose(_ card: Card) {
-        let faceUpCards = cards.indices.filter { cards[$0].isFaceUp }
-        
+        let faceUpCards = cards.indices.filter { cards[$0].isFaceUp && !cards[$0].isMatched }
+
         if(faceUpCards.count == 2) {
             for index in cards.indices {
                 if(cards[index].isFaceUp && !cards[index].isMatched) {
@@ -72,8 +72,8 @@ struct MemoryGame<CardContent : Equatable> {
         }
         
         if let chosenCard = cards.firstIndex(where: {$0.id == card.id}),
-            !cards[chosenCard].isMatched,
-            !cards[chosenCard].isFaceUp {
+           !cards[chosenCard].isMatched,
+           !cards[chosenCard].isFaceUp {
             
             cards[chosenCard].isFaceUp = true
             
@@ -93,9 +93,9 @@ struct MemoryGame<CardContent : Equatable> {
                     }
                 }
             }
-           
-
+            
+            
         }
-
+        
     }
 }

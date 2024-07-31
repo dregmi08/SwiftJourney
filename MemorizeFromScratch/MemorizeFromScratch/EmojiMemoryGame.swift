@@ -98,8 +98,4 @@ class EmojiMemoryGame : ObservableObject {
         model.choose(card)
     }
     
-
-   
-    
-    
 }
