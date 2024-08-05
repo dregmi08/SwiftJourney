@@ -11,21 +11,21 @@ struct EmojiMemoryGameView: View {
     
     @ObservedObject var viewModel: EmojiMemoryGame
     
+    private let aspectRatio: CGFloat = 2/3
 
     var body: some View {
         
         VStack {
             Text("Memorize: " + viewModel.themeName + " edition")
             
-            .font(.system(size: 25, weight: .bold, design: .rounded))
-            .foregroundColor(themeColorSetter(viewModel.themeColor))
+                .font(.system(size: 25, weight: .bold, design: .rounded))
+                .foregroundColor(themeColorSetter(viewModel.themeColor))
             
             Text("Score: \(viewModel.score)")
             
-            ScrollView {
-                cards
-                    .animation(.default, value: viewModel.cards)
-            }
+         
+                cards.animation(.default, value: viewModel.cards)
+          
             HStack{
                 Button(action: {
                     viewModel.shuffle()
@@ -43,27 +43,27 @@ struct EmojiMemoryGameView: View {
                 {
                     Text("New Game")
                 }
+                
             }
         }
         .padding()
         .foregroundColor(themeColorSetter(viewModel.themeColor))
         .font(.system(size: 20, weight: .bold, design: .rounded))
+        
     }
-
-    var cards : some View {
-        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing:0)], spacing:0) {
-            ForEach(viewModel.cards) { card in
+    
+    @ViewBuilder
+    private var cards : some View {
+        AspectVGrid(aspectRatio: aspectRatio, viewModel.cards) { card in
                     CardStruct(card)
                         .onTapGesture {
-                                self.viewModel.choose(card)
+                            self.viewModel.choose(card)
                         }
-                } 
-                .aspectRatio(2/3, contentMode: .fill)
-                .padding(4)
-        }
-    }
-        
+                }
+            }
 }
+
+
 
 
 func themeColorSetter(_ themeCol: String) -> Color {
@@ -84,40 +84,6 @@ func themeColorSetter(_ themeCol: String) -> Color {
          return Color.orange
      }
  }
-
-//create the card struct
- struct CardStruct: View {
-     let card : MemoryGame<String>.Card
-    
-     init(_ card: MemoryGame<String>.Card) {
-         self.card = card
-     }
-     
-    var body: some View {
-        //create rounded rectangle
-        //param for emoji
-        if(card.isFaceUp) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                .stroke()
-                .foregroundColor(themeColorSetter(card.cardColor))
-                Text(card.content)
-                    .font(.system(size: 200))
-                    .minimumScaleFactor(0.01)
-                    .aspectRatio(1, contentMode: .fit)
-            }
-        }
-        else {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                Text(" ")
-            }
-            .foregroundColor(themeColorSetter(card.cardColor))
-            .font(.largeTitle)
-            
-        }
-    }
-}
 
 struct EmojiMemoryGameView_Previews: PreviewProvider {
     static var previews: some View {

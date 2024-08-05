@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		243C1D3E2C52EB9600ECAB2F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243C1D3D2C52EB9600ECAB2F /* Theme.swift */; };
+		24CE234D2C5E25C7006540F7 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */; };
+		24CE23532C5F3B94006540F7 /* CardStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE23522C5F3B94006540F7 /* CardStruct.swift */; };
+		24CE23552C5F6296006540F7 /* Pie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE23542C5F6296006540F7 /* Pie.swift */; };
+		24CE23572C5F725F006540F7 /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE23562C5F725F006540F7 /* Cardify.swift */; };
 		24FF93442C2BFF3200354F25 /* MemorizeFromScratchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FF93432C2BFF3200354F25 /* MemorizeFromScratchApp.swift */; };
 		24FF93462C2BFF3200354F25 /* EmojiMemoryGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24FF93452C2BFF3200354F25 /* EmojiMemoryGameView.swift */; };
 		24FF93482C2BFF3400354F25 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24FF93472C2BFF3400354F25 /* Assets.xcassets */; };
@@ -18,6 +22,10 @@
 
 /* Begin PBXFileReference section */
 		243C1D3D2C52EB9600ECAB2F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
+		24CE23522C5F3B94006540F7 /* CardStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStruct.swift; sourceTree = "<group>"; };
+		24CE23542C5F6296006540F7 /* Pie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pie.swift; sourceTree = "<group>"; };
+		24CE23562C5F725F006540F7 /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		24FF93402C2BFF3200354F25 /* MemorizeFromScratch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemorizeFromScratch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24FF93432C2BFF3200354F25 /* MemorizeFromScratchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorizeFromScratchApp.swift; sourceTree = "<group>"; };
 		24FF93452C2BFF3200354F25 /* EmojiMemoryGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMemoryGameView.swift; sourceTree = "<group>"; };
@@ -41,6 +49,7 @@
 		24FF93372C2BFF3200354F25 = {
 			isa = PBXGroup;
 			children = (
+				24CE23562C5F725F006540F7 /* Cardify.swift */,
 				24FF93422C2BFF3200354F25 /* MemorizeFromScratch */,
 				24FF93412C2BFF3200354F25 /* Products */,
 			);
@@ -60,6 +69,9 @@
 				24FF93432C2BFF3200354F25 /* MemorizeFromScratchApp.swift */,
 				243C1D3D2C52EB9600ECAB2F /* Theme.swift */,
 				24FF93452C2BFF3200354F25 /* EmojiMemoryGameView.swift */,
+				24CE23522C5F3B94006540F7 /* CardStruct.swift */,
+				24CE23542C5F6296006540F7 /* Pie.swift */,
+				24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */,
 				24FF93592C39022100354F25 /* MemoryGame.swift */,
 				24FF935B2C39191600354F25 /* EmojiMemoryGame.swift */,
 				24FF93472C2BFF3400354F25 /* Assets.xcassets */,
@@ -148,6 +160,10 @@
 			files = (
 				24FF93462C2BFF3200354F25 /* EmojiMemoryGameView.swift in Sources */,
 				24FF93442C2BFF3200354F25 /* MemorizeFromScratchApp.swift in Sources */,
+				24CE23552C5F6296006540F7 /* Pie.swift in Sources */,
+				24CE23572C5F725F006540F7 /* Cardify.swift in Sources */,
+				24CE234D2C5E25C7006540F7 /* AspectVGrid.swift in Sources */,
+				24CE23532C5F3B94006540F7 /* CardStruct.swift in Sources */,
 				243C1D3E2C52EB9600ECAB2F /* Theme.swift in Sources */,
 				24FF935A2C39022100354F25 /* MemoryGame.swift in Sources */,
 				24FF935C2C39191600354F25 /* EmojiMemoryGame.swift in Sources */,
