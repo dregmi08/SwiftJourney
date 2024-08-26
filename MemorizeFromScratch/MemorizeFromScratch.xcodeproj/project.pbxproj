@@ -49,7 +49,6 @@
 		24FF93372C2BFF3200354F25 = {
 			isa = PBXGroup;
 			children = (
-				24CE23562C5F725F006540F7 /* Cardify.swift */,
 				24FF93422C2BFF3200354F25 /* MemorizeFromScratch */,
 				24FF93412C2BFF3200354F25 /* Products */,
 			);
@@ -69,6 +68,7 @@
 				24FF93432C2BFF3200354F25 /* MemorizeFromScratchApp.swift */,
 				243C1D3D2C52EB9600ECAB2F /* Theme.swift */,
 				24FF93452C2BFF3200354F25 /* EmojiMemoryGameView.swift */,
+				24CE23562C5F725F006540F7 /* Cardify.swift */,
 				24CE23522C5F3B94006540F7 /* CardStruct.swift */,
 				24CE23542C5F6296006540F7 /* Pie.swift */,
 				24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */,

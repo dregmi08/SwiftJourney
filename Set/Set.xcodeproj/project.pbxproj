@@ -7,18 +7,32 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24BC7C592C7AE02200999B7D /* Stripes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BC7C582C7AE02200999B7D /* Stripes.swift */; };
+		24BC7C5B2C7C01BB00999B7D /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BC7C5A2C7C01BB00999B7D /* Diamond.swift */; };
 		24E5089D2C619E2E00AA93AF /* SetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5089C2C619E2E00AA93AF /* SetApp.swift */; };
 		24E5089F2C619E2E00AA93AF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E5089E2C619E2E00AA93AF /* ContentView.swift */; };
 		24E508A12C619E3000AA93AF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24E508A02C619E3000AA93AF /* Assets.xcassets */; };
 		24E508A42C619E3000AA93AF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 24E508A32C619E3000AA93AF /* Preview Assets.xcassets */; };
+		24E508AB2C61ECA600AA93AF /* SetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E508AA2C61ECA600AA93AF /* SetModel.swift */; };
+		24E508AF2C61ECE500AA93AF /* SwiftViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E508AE2C61ECE500AA93AF /* SwiftViewModel.swift */; };
+		24E508B12C631D3A00AA93AF /* CardifySet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E508B02C631D3A00AA93AF /* CardifySet.swift */; };
+		24E508B32C6DA7D800AA93AF /* CardStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E508B22C6DA7D700AA93AF /* CardStruct.swift */; };
+		24E508B52C70012900AA93AF /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E508B42C70012900AA93AF /* AspectVGrid.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		24BC7C582C7AE02200999B7D /* Stripes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stripes.swift; sourceTree = "<group>"; };
+		24BC7C5A2C7C01BB00999B7D /* Diamond.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
 		24E508992C619E2E00AA93AF /* Set.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Set.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24E5089C2C619E2E00AA93AF /* SetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetApp.swift; sourceTree = "<group>"; };
 		24E5089E2C619E2E00AA93AF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		24E508A02C619E3000AA93AF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		24E508A32C619E3000AA93AF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		24E508AA2C61ECA600AA93AF /* SetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetModel.swift; sourceTree = "<group>"; };
+		24E508AE2C61ECE500AA93AF /* SwiftViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftViewModel.swift; sourceTree = "<group>"; };
+		24E508B02C631D3A00AA93AF /* CardifySet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardifySet.swift; sourceTree = "<group>"; };
+		24E508B22C6DA7D700AA93AF /* CardStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStruct.swift; sourceTree = "<group>"; };
+		24E508B42C70012900AA93AF /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +49,7 @@
 		24E508902C619E2E00AA93AF = {
 			isa = PBXGroup;
 			children = (
+				24BC7C5A2C7C01BB00999B7D /* Diamond.swift */,
 				24E5089B2C619E2E00AA93AF /* Set */,
 				24E5089A2C619E2E00AA93AF /* Products */,
 			);
@@ -53,6 +68,12 @@
 			children = (
 				24E5089C2C619E2E00AA93AF /* SetApp.swift */,
 				24E5089E2C619E2E00AA93AF /* ContentView.swift */,
+				24BC7C582C7AE02200999B7D /* Stripes.swift */,
+				24E508B22C6DA7D700AA93AF /* CardStruct.swift */,
+				24E508B02C631D3A00AA93AF /* CardifySet.swift */,
+				24E508AE2C61ECE500AA93AF /* SwiftViewModel.swift */,
+				24E508B42C70012900AA93AF /* AspectVGrid.swift */,
+				24E508AA2C61ECA600AA93AF /* SetModel.swift */,
 				24E508A02C619E3000AA93AF /* Assets.xcassets */,
 				24E508A22C619E3000AA93AF /* Preview Content */,
 			);
@@ -137,7 +158,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24E508AF2C61ECE500AA93AF /* SwiftViewModel.swift in Sources */,
+				24E508B12C631D3A00AA93AF /* CardifySet.swift in Sources */,
+				24BC7C592C7AE02200999B7D /* Stripes.swift in Sources */,
+				24E508B52C70012900AA93AF /* AspectVGrid.swift in Sources */,
 				24E5089F2C619E2E00AA93AF /* ContentView.swift in Sources */,
+				24E508AB2C61ECA600AA93AF /* SetModel.swift in Sources */,
+				24BC7C5B2C7C01BB00999B7D /* Diamond.swift in Sources */,
+				24E508B32C6DA7D800AA93AF /* CardStruct.swift in Sources */,
 				24E5089D2C619E2E00AA93AF /* SetApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
