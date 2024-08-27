@@ -159,6 +159,7 @@ struct SetModel {
         }
         else if (setFormed()) {
             replaceOrRemoveCards(currentlySelected[0],currentlySelected[1], currentlySelected[2])
+            currentlySelected.removeFirst(3)
         }
     }
 }

@@ -31,9 +31,6 @@ struct ContentView: View {
                 
                 Button(action: {
                     viewModel.dealCards()
-                    print(viewModel.cards.count)
-                    print(viewModel.currentlyDealt.count)
-                    print(viewModel.currentlySelected.count)
                 }) {
                     Text("Deal 3 More")
                 }

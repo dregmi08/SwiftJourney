@@ -99,7 +99,5 @@ struct CardStruct: View {
         default:
             return .pink
         }
-        
     }
 }
-
