@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text("Set: A Matching Game")
-                .foregroundColor(.red)
+                .foregroundColor(Color(red: 0.93, green: 0.5, blue: 0.6))
                 .font(.custom("MarkerFelt-Wide", size: 30))
             
             ScrollView {
@@ -21,7 +21,6 @@ struct ContentView: View {
             }
             
             HStack {
-                
                 Button(action: {
                     viewModel.newGame()
                 }) { 
@@ -32,12 +31,15 @@ struct ContentView: View {
                 
                 Button(action: {
                     viewModel.dealCards()
+                    print(viewModel.cards.count)
+                    print(viewModel.currentlyDealt.count)
+                    print(viewModel.currentlySelected.count)
                 }) {
                     Text("Deal 3 More")
                 }
-                .disabled(viewModel.currentlyDealt.count == 81)
+                .disabled(viewModel.cards.count == 0)
             }
-            .foregroundColor(.red)
+            .foregroundColor(Color(red: 0.93, green: 0.5, blue: 0.6))
             .font(.custom("MarkerFelt-Wide", size: 25))
             
         }
@@ -50,13 +52,7 @@ struct ContentView: View {
         AspectVGrid(aspectRatio: aspectRatio, items: viewModel.currentlyDealt) { card in
             CardStruct(card)
                 .onTapGesture {
-                    if(card.isMatched) {
-                        viewModel.deselect(card)
-                    }
-                    else {
-                        viewModel.selectCard(card)
-
-                    }
+                    viewModel.selectCard(card)
                 }
         }
     }

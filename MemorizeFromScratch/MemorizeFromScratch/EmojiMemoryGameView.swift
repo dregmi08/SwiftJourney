@@ -16,7 +16,7 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         
         VStack {
-            Text("Memorize: " + viewModel.themeName + " edition")
+            Text("Memorize: \(viewModel.themeName) edition")
             
                 .font(.system(size: 25, weight: .bold, design: .rounded))
                 .foregroundColor(themeColorSetter(viewModel.themeColor))

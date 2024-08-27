@@ -33,16 +33,16 @@ struct CardifySet: ViewModifier {
             return .green
         }
         else if isSelected {
-            return .cyan
+            return .black
         }
         else {
             switch color {
             case "blue":
-                return .blue
+                return Color(red: 0.0, green: 0.5, blue: 0.7) 
             case "pink":
-                return .pink
-            case "purple":
-                return .purple
+                return Color(red: 0.93, green: 0.5, blue: 0.6) 
+            case "green":
+                return Color(red: 0.55, green: 0.65, blue: 0.50) 
             default:
                 return .pink
             }
