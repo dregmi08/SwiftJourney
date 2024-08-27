@@ -20,13 +20,16 @@ struct AspectVGrid<Item: Identifiable, ItemView: View> : View {
     }
    
     var body: some View {
+        
         GeometryReader { geometry in
-           // let cardWidth = cardWidthPicker(cardCount: CGFloat(items.count), size: geometry.size, aspectRatio: aspectRatio)
-            LazyVGrid (columns: [GridItem(.adaptive(minimum: 70), spacing: 0)], spacing: 0){
-                ForEach(items) { item in
-                    content(item)
-                        .aspectRatio(aspectRatio, contentMode: .fit)
-                        .padding(4)
+            // let cardWidth = cardWidthPicker(cardCount: CGFloat(items.count), size: geometry.size, aspectRatio: aspectRatio)
+            ScrollView{
+                LazyVGrid (columns: [GridItem(.adaptive(minimum: 70), spacing: 0)], spacing: 0){
+                    ForEach(items) { item in
+                        content(item)
+                            .aspectRatio(aspectRatio, contentMode: .fit)
+                            .padding(4)
+                    }
                 }
             }
         }

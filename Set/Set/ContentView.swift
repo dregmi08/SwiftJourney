@@ -15,10 +15,8 @@ struct ContentView: View {
             Text("Set: A Matching Game")
                 .foregroundColor(Color(red: 0.93, green: 0.5, blue: 0.6))
                 .font(.custom("MarkerFelt-Wide", size: 30))
-            
-            ScrollView {
+        
                 cards
-            }
             
             HStack {
                 Button(action: {
@@ -31,6 +29,7 @@ struct ContentView: View {
                 
                 Button(action: {
                     viewModel.dealCards()
+                   
                 }) {
                     Text("Deal 3 More")
                 }
