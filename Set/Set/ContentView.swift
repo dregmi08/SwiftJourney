@@ -34,6 +34,7 @@ struct ContentView: View {
                     Text("Deal 3 More")
                 }
                 .disabled(viewModel.cards.count == 0)
+                
             }
             .foregroundColor(Color(red: 0.93, green: 0.5, blue: 0.6))
             .font(.custom("MarkerFelt-Wide", size: 25))

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CardStruct: View {
+struct CardStruct: View{
     typealias Card = MemoryGame<String>.Card
 
     let card : Card
@@ -20,25 +20,36 @@ struct CardStruct: View {
     var body: some View {
        //create rounded rectangle
        //param for emoji
-        
-            Pie(endAngle: .degrees(240))
-                .opacity(0.4)
-                .padding(2)
-                .overlay {
-                    Text(card.content)
-                        .font(.system(size: 200))
-                        .minimumScaleFactor(0.01)
-                        .multilineTextAlignment(.center)
-                        .aspectRatio(1, contentMode: .fit)
-                }  .cardify(isFaceUp: card.isFaceUp, isMatched: card.isMatched, cardColor: card.cardColor)
+        TimelineView(.animation) { timeline in
+            if(!card.isMatched) {
+                Pie(endAngle: .degrees(card.bonusPercentRemaining * 360))
+                    .opacity(0.4)
+                    .padding(2)
+                    .overlay(textContent)
+                    .cardify(isFaceUp: card.isFaceUp, isMatched: card.isMatched, cardColor: card.cardColor)
+                    .transition(.scale)
+            }
+            else {
+                Color.clear
+            }
+        }
    }
+    
+    var textContent: some View {
+        Text(card.content)
+            .font(.system(size: 200))
+            .minimumScaleFactor(0.01)
+            .multilineTextAlignment(.center)
+            .aspectRatio(1, contentMode: .fit)
+            .rotationEffect(.degrees(card.isMatched ? 360 : 0))
+            .animation(.spin(0.5), value: card.isMatched)
+    }
 }
 
-struct CardStruct_Previews: PreviewProvider {
-    typealias Card = CardStruct.Card
 
-    static var previews: some View {
-        CardStruct(Card(content: "X", cardColor: "red", id: "hi"))
-            .padding()
+
+extension Animation {
+    static func spin(_ duration: TimeInterval) -> Animation {
+        .linear(duration: duration)
     }
 }

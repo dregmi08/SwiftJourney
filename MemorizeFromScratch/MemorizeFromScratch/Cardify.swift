@@ -7,42 +7,48 @@
 
 import SwiftUI
 
-struct Cardify: ViewModifier {
+struct Cardify: ViewModifier, Animatable {
     
-    var isFaceUp: Bool
-    var isMatched: Bool
-    let cardColor: String
+    init(isFaceUp : Bool) {
+        rotation = isFaceUp ? 0 : 180
+    }
+    
+    var isFaceUp: Bool {
+        rotation < 90
+    }
+  
+   
+    var rotation: Double
+    
+    var animatableData: Double {
+        get {return rotation}
+        set {rotation = newValue}
+    }
     
     func body(content: Content) -> some View {
         
-        if(isFaceUp && !isMatched) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder()
-                    .background(.white)
-                    .foregroundColor(themeColorSetter(cardColor))
-                    .overlay(content)
-            }
-        }
-        else if (isMatched) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
-        }
-        else {
-            ZStack {
-                RoundedRectangle(cornerRadius: 12)
-                    .overlay(Text(" "))
-            }
-            .foregroundColor(themeColorSetter(cardColor))
-            .font(.largeTitle)
-            
-        }
+        let roundedRectangle = RoundedRectangle(cornerRadius:12)
+      
+             ZStack {
+                Group {
+                    roundedRectangle
+                        .foregroundColor(.white)
+                    roundedRectangle
+                        .strokeBorder(lineWidth:2)
+                }.opacity(isFaceUp ? 1:0)
+                .overlay(content)
+                roundedRectangle.fill().opacity(isFaceUp ? 0 : 1)
+             }
+             .rotation3DEffect(.degrees(rotation), axis : (0,1,0))
+        
+             
+        
         
     }
 }
 
 extension View {
     func cardify(isFaceUp: Bool, isMatched: Bool, cardColor: String) -> some View {
-        modifier(Cardify(isFaceUp: isFaceUp, isMatched: isMatched, cardColor: cardColor))
+        modifier(Cardify(isFaceUp: isFaceUp))
     }
 }

@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import CoreGraphics
 
 struct Pie: Shape {
-    var startAngle: Angle = Angle.zero
+    var startAngle: Angle = .zero
     var endAngle: Angle
     
     func path(in rect: CGRect) -> Path {

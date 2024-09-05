@@ -47,6 +47,7 @@ struct SetModel {
         let shading: String
     }
     
+ 
     mutating func selectCard(_ card: Card) {
         
         //first, grab the index of the selected card from the cards currently dealt array

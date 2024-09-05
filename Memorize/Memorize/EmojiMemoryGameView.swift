@@ -21,8 +21,6 @@ struct EmojiMemoryGameView: View {
                 viewModel.shuffle()
             }
         }.padding()
-     
-        
     }
     
   

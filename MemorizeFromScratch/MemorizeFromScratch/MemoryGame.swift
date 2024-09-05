@@ -47,17 +47,69 @@ struct MemoryGame<CardContent> where CardContent : Equatable {
             return "\(content), \(id), \(isFaceUp), \(isMatched), \(isAlreadySeen), \(cardColor)"
         }
         let content: CardContent
-        var isFaceUp = false
+        var isFaceUp = false {
+            didSet {
+                if isFaceUp {
+                    startUsingBonusTime()
+                }
+                else {
+                    stopUsingBonusTime()
+                }
+                if oldValue && !isFaceUp {
+                    isAlreadySeen = true
+                }
+            }
+        }
         var cardColor: String
         let id: String
-        var isMatched  = false
+        var isMatched  = false {
+            didSet {
+                if isMatched {
+                    stopUsingBonusTime()
+                }
+            }
+        }
         var isAlreadySeen = false
+        
+        // MARK: - Bonus Time
+        
+        private mutating func startUsingBonusTime() {
+            if isFaceUp && !isMatched && bonusPercentRemaining > 0, lastFaceUpDate == nil {
+                lastFaceUpDate = Date()
+            }
+        }
+        
+        private mutating func stopUsingBonusTime() {
+            pastFaceUpTime = faceUpTime
+            lastFaceUpDate = nil
+        }
+        
+        var bonus: Int {
+            Int(bonusTimeLimit * bonusPercentRemaining)
+        }
+        
+        var bonusPercentRemaining: Double {
+            bonusTimeLimit > 0 ? max(0, bonusTimeLimit - faceUpTime)/bonusTimeLimit : 0
+        }
+        
+        var faceUpTime: TimeInterval {
+            if let lastFaceUpDate {
+                return pastFaceUpTime + Date().timeIntervalSince(lastFaceUpDate)
+            } else {
+                return pastFaceUpTime
+            }
+        }
+        
+        var bonusTimeLimit: TimeInterval = 6
+        
+        var lastFaceUpDate: Date?
+        
+        var pastFaceUpTime: TimeInterval = 0
     }
     
     mutating func shuffle() {
         cards.shuffle()
     }
-    
     
     mutating func choose(_ card: Card) {
         let faceUpCards = cards.indices.filter { cards[$0].isFaceUp && !cards[$0].isMatched }
@@ -80,7 +132,7 @@ struct MemoryGame<CardContent> where CardContent : Equatable {
             if (faceUpCards.count == 1) {
                 if let potentialMatch = cards.firstIndex(where: {$0.id == cards[faceUpCards[0]].id}) {
                     if(cards[chosenCard].content == cards[potentialMatch].content) {
-                        score += 2
+                        score += 2 + cards[chosenCard].bonus + cards[potentialMatch].bonus
                         cards[chosenCard].isMatched = true
                         cards[potentialMatch].isMatched = true
                     }
@@ -90,11 +142,7 @@ struct MemoryGame<CardContent> where CardContent : Equatable {
                         }
                     }
                 }
-               
             }
-            
-            
         }
-        
     }
 }
