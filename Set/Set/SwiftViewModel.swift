@@ -17,13 +17,18 @@ class SwiftViewModel: ObservableObject {
     
     //variables
     
-    var cards: [SetModel.Card] {model.cards}
+    var cardDeck: [SetModel.Card] {model.cardDeck}
     
     var score: Int {model.score}
     
     var currentlySelected: [SetModel.Card] {model.currentlySelected}
     
     var currentlyDealt: [SetModel.Card] {model.cardsCurrentlyDealt}
+    
+    var currentlyMatched: [SetModel.Card] {model.cardsMatched}
+  
+    var allCards : [SetModel.Card] {model.allCards}
+    
     
     //MARK: - Intents
     
@@ -42,5 +47,8 @@ class SwiftViewModel: ObservableObject {
     func newGame() {
         model = SwiftViewModel.createNewSetGame()
     }
+    
+    var setFormed : Bool
+    {model.setFormed()}
 
 }

@@ -22,7 +22,7 @@ struct CardStruct: View {
             }
         }
         .padding()
-        .cardifyset(color: card.color, id: card.id, shape: card.shape, numShapes: card.numShapes, shading: card.shading, isSelected: card.isSelected, isMatched: card.isMatched)
+        .cardifyset(color: card.color, id: card.id, shape: card.shape, numShapes: card.numShapes, shading: card.shading, isSelected: card.isSelected, isDealt: card.isDealt, isMatched: card.isMatched)
     }
     
     private func cardshapeView(_ shape: String, _ shading: String) -> AnyView {

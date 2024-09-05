@@ -13,27 +13,31 @@ struct CardifySet: ViewModifier {
     let shape: String
     let color : String
     var isSelected : Bool = false
+    var isDealt: Bool
     var isMatched = false
     let numShapes: Int
     let shading: String
     
     //shapes : for now, circle, rounded rectangle, diamond
     func body(content: Content) -> some View {
-
+        let roundedRectangle = RoundedRectangle(cornerRadius: 12.0)
+        
         ZStack {
-            RoundedRectangle(cornerRadius: 12.0)
+            roundedRectangle
                 .stroke(cardColorDecider(color, isSelected, isMatched), lineWidth: 2)
+                .background(Color.white)
+                .overlay(content)
+            roundedRectangle.fill(cardColorDecider(color, isSelected, isMatched)).opacity(isDealt ? 0 : 1)
         }
-        .background(Color.white)
-        .overlay(content)
+        
     }
     
     func cardColorDecider(_ color: String, _ isSelected: Bool, _ isMatched: Bool) -> Color {
-        if isMatched {
+       if isMatched {
             return .green
         }
         else if isSelected {
-            return .black
+            return .cyan
         }
         else {
             switch color {
@@ -50,10 +54,9 @@ struct CardifySet: ViewModifier {
     }
 }
 
-
 extension View {
-    func cardifyset(color: String, id: String, shape: String, numShapes: Int, shading: String, isSelected: Bool, isMatched: Bool) -> some View {
+    func cardifyset(color: String, id: String, shape: String, numShapes: Int, shading: String, isSelected: Bool, isDealt: Bool, isMatched: Bool) -> some View {
         modifier(CardifySet(id: id, shape: shape, color: color,
-                            isSelected: isSelected, isMatched: isMatched, numShapes: numShapes, shading: shading))
+                            isSelected: isSelected, isDealt: isDealt, isMatched: isMatched, numShapes: numShapes, shading: shading))
     }
 }

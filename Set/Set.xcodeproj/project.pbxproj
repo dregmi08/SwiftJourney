@@ -49,7 +49,6 @@
 		24E508902C619E2E00AA93AF = {
 			isa = PBXGroup;
 			children = (
-				24BC7C5A2C7C01BB00999B7D /* Diamond.swift */,
 				24E5089B2C619E2E00AA93AF /* Set */,
 				24E5089A2C619E2E00AA93AF /* Products */,
 			);
@@ -66,6 +65,7 @@
 		24E5089B2C619E2E00AA93AF /* Set */ = {
 			isa = PBXGroup;
 			children = (
+				24BC7C5A2C7C01BB00999B7D /* Diamond.swift */,
 				24E5089C2C619E2E00AA93AF /* SetApp.swift */,
 				24E5089E2C619E2E00AA93AF /* ContentView.swift */,
 				24BC7C582C7AE02200999B7D /* Stripes.swift */,

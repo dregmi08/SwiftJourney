@@ -95,7 +95,7 @@ struct EmojiMemoryGameView: View {
     private func chooseCardAnimation (_ card: Card) {
         withAnimation(.easeInOut(duration: 0.5)) {
             let scoreBeforeChoosing = viewModel.score
-                viewModel.choose(card)
+            viewModel.choose(card)
             let scoreChange = viewModel.score - scoreBeforeChoosing
             lastScoreChange = (scoreChange, card.id)
         }
