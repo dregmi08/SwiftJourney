@@ -39,7 +39,6 @@ struct ContentView: View {
             newGameButton
                 .foregroundColor(Color(red: 0.93, green: 0.5, blue: 0.6))
                 .font(.custom("MarkerFelt-Wide", size: 25))
-        
     }
     
     private var titleText : some View {
@@ -50,105 +49,86 @@ struct ContentView: View {
     
     private var newGameButton: some View {
         Button(action: {
-                viewModel.newGame()
+            withAnimation() {
+                newGame()
+            }
             }) {
             Text("New Game")
         }
     } 
     
-    @State var dealSourceNamespace = true
-    @State var discardedSourceNamespace = false
-    
-    @ViewBuilder
-    var cards : some View {
-        AspectVGrid(aspectRatio: aspectRatio, items: viewModel.allCards) { card in
-                if(hasBeenDealt(card: card)) {
-                CardStruct(card)
-                    .matchedGeometryEffect(id: "\(card.id)15", in: dealingNamespace, isSource: dealSourceNamespace)
-                    .matchedGeometryEffect(id: "\(card.id)10" , in: discardNamespace, isSource: discardedSourceNamespace)
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            viewModel.selectCard(card)
-                            discardCard(card)
-                        }
-                    }
-                }
-        
-            }
-            .onAppear() {
-                    for card in viewModel.currentlyDealt {
-                        dealt.insert(card.id)
-                    }
-            }
-    }
-    
-    private func discardCard (_ card: Card) {
-            if(viewModel.setFormed) {
-                for i in (1...3) {
-                    let cardToDiscard = viewModel.currentlyMatched[viewModel.currentlyMatched.count-i].id
-                    dealt.remove(cardToDiscard)
-                    discarded.insert(cardToDiscard)
-                }
-                    dealSourceNamespace.toggle()
-                    discardedSourceNamespace.toggle()
+    private func newGame() {
+        viewModel.newGame()
+        isSourceNamespace = true
+        dealt = Set<Card.ID>()
+        for card in viewModel.displayed {
+            deal(card)
         }
     }
     
-    @State private var dealt = Set<Card.ID>()
+    @State var dealt = Set<Card.ID>()
+    @State var isSourceNamespace = true
+
+    private func deal(_ card: Card) {
+        dealt.insert(card.id)
+    }
     
-    private func hasBeenDealt(card : Card) -> Bool {
+    private func isDealt(_ card: Card) -> Bool {
         dealt.contains(card.id)
     }
     
-    private var undealtCards : [Card] {
-        viewModel.allCards.filter {!hasBeenDealt(card: $0)}
+    @ViewBuilder
+    var cards : some View {
+        AspectVGrid(aspectRatio: aspectRatio, items: viewModel.displayed) { card in
+            if(isDealt(card)) {
+                CardStruct(card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .matchedGeometryEffect(id: "\(card.id)0", in: discardNamespace)
+                    .onTapGesture {
+                        withAnimation {
+                            viewModel.choose(card)
+                        }
+                    }
+                }
+            }
     }
     
-    private var dealtCards : [Card] {
-        viewModel.allCards.filter {hasBeenDealt(card: $0)}
-    }
-
     
     var deckPile : some View {
         ZStack {
-            ForEach(undealtCards) { card in
+            ForEach(viewModel.deck) { card in
                 CardStruct(card)
-                    .frame(width: 66, height: 100)
-                    .matchedGeometryEffect(id: "\(card.id)15", in: dealingNamespace)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .transition(.asymmetric(insertion: .identity , removal: .scale))
+            }
+        }
+        .frame(width: 66, height: 100)
+        .onAppear {
+            withAnimation {
+                for card in viewModel.displayed {
+                    deal(card)
+                }
             }
         }
         .onTapGesture {
             withAnimation (.easeInOut(duration: 0.5)) {
-                if(!viewModel.cardDeck.isEmpty) {
-                    viewModel.dealCards()
-                    for i in (1...3) {
-                        dealt.insert(viewModel.allCards[viewModel.currentlyDealt.count-i].id)
-                    }
+                for card in viewModel.deck.prefix(3) {
+                    deal(card)
                 }
+                viewModel.deal()
             }
         }
     }
     
-    
-    @State private var discarded = Set<Card.ID>()
-    
-    private func hasBeenMatched(card : Card) -> Bool {
-        discarded.contains(card.id)
-    }
-    
-    private var matchedCards : [Card] {
-        viewModel.allCards.filter {hasBeenMatched(card: $0)}
-    }
-
     var discardPile : some View {
         ZStack {
-            ForEach(matchedCards) { card in
+            ForEach(viewModel.matchPile) { card in
                 CardStruct(card)
-                    .frame(width: 66, height: 100)
-                    .matchedGeometryEffect(id: "\(card.id)10", in: discardNamespace)
+                    .matchedGeometryEffect(id: "\(card.id)0", in: discardNamespace)
+                    .transition(.asymmetric(insertion: .identity , removal: .scale))
             }
-        }
-
+        }                   
+        .frame(width: 66, height: 100)
     }
 }
 

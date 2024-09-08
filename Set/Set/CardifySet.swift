@@ -7,16 +7,21 @@
 
 import SwiftUI
 
+typealias Shapes = SetModel.Shapes
+typealias Colors = SetModel.Colors
+typealias Shading = SetModel.Shading
+
 struct CardifySet: ViewModifier {
     
+    
     let id: String
-    let shape: String
-    let color : String
+    let shape: Shapes
+    let color : Colors
     var isSelected : Bool = false
     var isDealt: Bool
     var isMatched = false
     let numShapes: Int
-    let shading: String
+    let shading: Shading
     
     //shapes : for now, circle, rounded rectangle, diamond
     func body(content: Content) -> some View {
@@ -27,12 +32,14 @@ struct CardifySet: ViewModifier {
                 .stroke(cardColorDecider(color, isSelected, isMatched), lineWidth: 2)
                 .background(Color.white)
                 .overlay(content)
-            roundedRectangle.fill(cardColorDecider(color, isSelected, isMatched)).opacity(isDealt ? 0 : 1)
+            roundedRectangle.fill(cardColorDecider(color, isSelected, isMatched)).opacity(isMatched || isDealt ? 0 : 1)
         }
+        .rotationEffect(Angle(degrees: isMatched ? 360 : 0)) // Apply rotation
+        .animation(.easeInOut(duration: 1.0), value: isMatched)
         
     }
     
-    func cardColorDecider(_ color: String, _ isSelected: Bool, _ isMatched: Bool) -> Color {
+    func cardColorDecider(_ color: Colors, _ isSelected: Bool, _ isMatched: Bool) -> Color {
        if isMatched {
             return .green
         }
@@ -40,22 +47,13 @@ struct CardifySet: ViewModifier {
             return .cyan
         }
         else {
-            switch color {
-            case "blue":
-                return Color(red: 0.0, green: 0.5, blue: 0.7) 
-            case "pink":
-                return Color(red: 0.93, green: 0.5, blue: 0.6) 
-            case "green":
-                return Color(red: 0.55, green: 0.65, blue: 0.50) 
-            default:
-                return .pink
-            }
+            return shapeColor(color)
         }
     }
 }
 
 extension View {
-    func cardifyset(color: String, id: String, shape: String, numShapes: Int, shading: String, isSelected: Bool, isDealt: Bool, isMatched: Bool) -> some View {
+    func cardifyset(color: Colors, id: String, shape: Shapes, numShapes: Int, shading: Shading, isSelected: Bool, isDealt: Bool, isMatched: Bool) -> some View {
         modifier(CardifySet(id: id, shape: shape, color: color,
                             isSelected: isSelected, isDealt: isDealt, isMatched: isMatched, numShapes: numShapes, shading: shading))
     }

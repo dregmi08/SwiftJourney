@@ -23,7 +23,7 @@ struct AspectVGrid<Item: Identifiable, ItemView: View> : View {
         
         GeometryReader { geometry in
             let cardWidth = max(70, cardWidthPicker(cardCount: CGFloat(items.count), size: geometry.size, aspectRatio: aspectRatio))
-            ScrollView{
+            ScrollView {
                 LazyVGrid (columns: [GridItem(.adaptive(minimum: cardWidth), spacing: 0)], spacing: 0){
                     ForEach(items) { item in
                         content(item)

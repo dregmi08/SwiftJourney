@@ -17,38 +17,27 @@ class SwiftViewModel: ObservableObject {
     
     //variables
     
-    var cardDeck: [SetModel.Card] {model.cardDeck}
+    var deck: [SetModel.Card] {model.deck}
     
-    var score: Int {model.score}
+    var selected: [SetModel.Card] {model.selected}
     
-    var currentlySelected: [SetModel.Card] {model.currentlySelected}
+    var displayed: [SetModel.Card] {model.displayed}
     
-    var currentlyDealt: [SetModel.Card] {model.cardsCurrentlyDealt}
-    
-    var currentlyMatched: [SetModel.Card] {model.cardsMatched}
-  
-    var allCards : [SetModel.Card] {model.allCards}
-    
+    var matchPile: [SetModel.Card] {model.matchPile}
+      
     
     //MARK: - Intents
     
-    func selectCard(_ card: SetModel.Card) {
-        model.selectCard(card)
+    func choose(_ card: SetModel.Card) {
+        model.choose(card)
     }
     
-    func dealCards() {
-        model.dealCards()
-    }
-    
-    func deselect(_ card: SetModel.Card) {
-        model.deselect(card)
+    func deal() {
+        model.deal()
     }
     
     func newGame() {
         model = SwiftViewModel.createNewSetGame()
     }
-    
-    var setFormed : Bool
-    {model.setFormed()}
 
 }

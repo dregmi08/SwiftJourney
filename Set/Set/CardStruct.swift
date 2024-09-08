@@ -25,79 +25,69 @@ struct CardStruct: View {
         .cardifyset(color: card.color, id: card.id, shape: card.shape, numShapes: card.numShapes, shading: card.shading, isSelected: card.isSelected, isDealt: card.isDealt, isMatched: card.isMatched)
     }
     
-    private func cardshapeView(_ shape: String, _ shading: String) -> AnyView {
-        var shapeView: AnyView
-        let color = shapeColorDecider(card.color)
-        switch(shape) {
-        case "circle" :
-            shapeView = AnyView(Circle().fill(color))
-        case "rounded-rect" :
-            shapeView = AnyView(RoundedRectangle(cornerRadius: 7.0).fill(color))
-        case "diamond" :
-            shapeView = AnyView(Diamond().fill(color))
-        default :
-            shapeView = AnyView(Diamond())
-        }
+    private func cardShapeView(_ shape: Shapes, _ shading: Shading, _ color : Colors) -> AnyView {
         
+        var shapeView: AnyView
+        let color = shapeColor(color)
+        
+        switch(shape) {
+        case .circle :
+            shapeView = AnyView(Circle().fill(color))
+        case .rectangle :
+            shapeView = AnyView(RoundedRectangle(cornerRadius: 7.0).fill(color))
+        case .diamond :
+            shapeView = AnyView(Diamond().fill(color))
+        }
         return shapeView
     }
         
-    private func cardView(_ shading: String) -> AnyView {
-        let color = shapeColorDecider(card.color)
-
-        switch shading {
-        case "solid":
-            return AnyView(cardshapeView(card.shape, shading))
-
-        case "striped":
-            return AnyView(stripedShapeView(card.shape, color: color))
-
-        case "shaded":
-            return AnyView(cardshapeView(card.shape, shading).opacity(0.4))
-
-        default:
-            return AnyView(cardshapeView(card.shape, shading).opacity(0.4))
+        func cardView(_ shading: Shading) -> AnyView {
+            
+            switch shading {
+            case .solid:
+                return AnyView(cardShapeView(card.shape, shading, card.color))
+            case .striped:
+                return AnyView(stripedShapeView(card.shape, color: card.color))
+            case .shaded:
+                return AnyView(cardShapeView(card.shape, shading, card.color).opacity(0.4))
+            }
+            
+            func stripedShapeView(_ shape: Shapes, color: Colors) -> AnyView {
+                let stripeView = Stripes().stroke(shapeColor(color), lineWidth: 2)
+                
+                switch shape {
+                case .diamond:
+                    return AnyView(ZStack {
+                        Diamond().stroke(shapeColor(color), lineWidth: 2)
+                        stripeView.clipShape(Diamond())
+                    })
+                    
+                case .rectangle:
+                    let roundedRect = RoundedRectangle(cornerRadius: 7.0)
+                    return AnyView(ZStack {
+                        roundedRect.stroke(shapeColor(color), lineWidth: 2)
+                        stripeView.clipShape(roundedRect)
+                    })
+                    
+                case .circle:
+                    return AnyView(ZStack {
+                        Circle().stroke(shapeColor(color), lineWidth: 2)
+                        stripeView.clipShape(Circle())
+                    })
+                }
+            }
         }
     }
 
-    private func stripedShapeView(_ shape: String, color: Color) -> AnyView {
-        let stripeView = Stripes().stroke(color, lineWidth: 2)
-        
-        switch shape {
-        case "diamond":
-            return AnyView(ZStack {
-                Diamond().stroke(color, lineWidth: 2)
-                stripeView.clipShape(Diamond())
-            })
-            
-        case "rounded-rect":
-            let roundedRect = RoundedRectangle(cornerRadius: 7.0)
-            return AnyView(ZStack {
-                roundedRect.stroke(color, lineWidth: 2)
-                stripeView.clipShape(roundedRect)
-            })
-            
-        case "circle":
-            return AnyView(ZStack {
-                Circle().stroke(color, lineWidth: 2)
-                stripeView.clipShape(Circle())
-            })
-            
-        default:
-            return AnyView(EmptyView())
-        }
-    }
-    //color decider
-    func shapeColorDecider(_ color: String) -> Color {
-        switch color {
-        case "blue":
-            return Color(red: 0.0, green: 0.5, blue: 0.7) 
-        case "pink":
-            return Color(red: 0.93, green: 0.5, blue: 0.6) 
-        case "green":
-            return Color(red: 0.55, green: 0.65, blue: 0.50) 
-        default:
-            return .pink
-        }
+func shapeColor(_ color: Colors) -> Color {
+    switch color {
+    case .blue:
+        return Color(red: 0.0, green: 0.5, blue: 0.7)
+    case .pink:
+        return Color(red: 0.93, green: 0.5, blue: 0.6)
+    case .green:
+        return Color(red: 0.55, green: 0.65, blue: 0.50)
     }
 }
+
+

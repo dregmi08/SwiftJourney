@@ -9,129 +9,93 @@ import Foundation
 
 struct SetModel {
     
-    private(set) var score = 0
+    private(set) var deck : [Card] = []
+    private(set) var displayed : [Card] = []
+    private (set) var selected : [Card] = []
+    private (set) var matchPile : [Card] = []
+        
+    enum Shapes: Int, CaseIterable {
+        case circle, rectangle, diamond
+    }
     
-    private(set) var cardDeck : [Card] = []
+    enum Colors: Int, CaseIterable {
+        case blue, green, pink
+    }
     
-    private (set) var currentlySelected : [Card] = []
-    
-    private (set) var cardsCurrentlyDealt: [Card] = []
-    
-    private (set) var cardsMatched : [Card] = []
-    
-    private (set) var allCards : [Card] = []
+    enum Shading: Int, CaseIterable {
+        case solid, shaded, striped
+    }
    
     init() {
-        for attributeIndex in 1...27 {
-            
+        for attributeIndex in 1...(Shapes.allCases.count * 
+                                   Colors.allCases.count * Shading.allCases.count) {
+       
             let shapeNum = (attributeIndex % 3) == 0 ? 3 : (attributeIndex % 3)
-            let color = (attributeIndex % 9) < 3 ? "blue" : ((attributeIndex % 9) < 6 ? "green" : "pink")
-            let shading = (attributeIndex % 27) < 9 ? "solid" : ((attributeIndex % 27) < 18 ? "shaded" : "striped")
+            let color = (attributeIndex % 9) < 3 ? Colors.blue : 
+                ((attributeIndex % 9) < 6 ? Colors.green : Colors.pink)
+            let shading = (attributeIndex % 27) < 9 ? Shading.solid : 
+                ((attributeIndex % 27) < 18 ? Shading.shaded : Shading.striped)
             
-            let (card1, card2, card3) = (Card(id: "\(attributeIndex)a", shape: "circle", color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)b", shape: "diamond", color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)c", shape: "rounded-rect", color: color, numShapes: shapeNum, shading: shading))
+            let (card1, card2, card3) = (Card(id: "\(attributeIndex)a", shape: Shapes.circle, color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)b", shape: Shapes.diamond, color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)c", shape: Shapes.rectangle, color: color, numShapes: shapeNum, shading: shading))
             
-            cardDeck.append(card1)
-            cardDeck.append(card2)
-            cardDeck.append(card3)
+            deck.append(card1)
+            deck.append(card2)
+            deck.append(card3)
         }
 
-        cardDeck.shuffle()
-        
+        deck.shuffle()
         for i in 0...11 {
-            cardDeck[i].isDealt = true
+            deck[i].isDealt = true
+            displayed.append(deck[i])
         }
-        cardsCurrentlyDealt.append(contentsOf: cardDeck.prefix(12))
-        allCards.append(contentsOf: cardDeck)
-        cardDeck.removeFirst(12)
+        deck.removeFirst(12)
     }
     
     struct Card : Equatable, Identifiable {
         let id: String
-        let shape: String
-        let color : String
+        let shape: SetModel.Shapes
+        let color : SetModel.Colors
         var isSelected : Bool = false
         var isMatched = false
         var isDealt = false
         let numShapes: Int
-        let shading: String
+        let shading: SetModel.Shading
     }
     
- 
-    mutating func selectCard(_ card: Card) {
-        
-        //first, grab the index of the selected card from the cards currently dealt array
-        if let indexOfSelected = cardsCurrentlyDealt.firstIndex(where: {$0.id == card.id}) {
-            if(cardsCurrentlyDealt[indexOfSelected].isSelected == true) {
-                deselect(card)
+    mutating func choose(_ card: Card) {            
+            if(card.isSelected) {
+                if let unselect = displayed.firstIndex(of: card) {displayed[unselect].isSelected.toggle()}
             }
             else {
-                cardsCurrentlyDealt[indexOfSelected].isSelected = true
-                currentlySelected.append(cardsCurrentlyDealt[indexOfSelected])
-              
-                //if a set is already formed from the cards currently selected, then indicate
-                //on the screen that three have been selected
-                if(setFormed()) {
-                        currentlySelected.prefix(3).forEach { card in
-                            if let indexOfSetMember = cardsCurrentlyDealt.firstIndex(where: {$0.id == card.id}) {
-                                cardsMatched.append(cardsCurrentlyDealt[indexOfSetMember])
-                                cardsCurrentlyDealt[indexOfSetMember].isMatched = true
-                                cardsMatched[cardsMatched.count-1].isMatched = true
+                selected.append(card)
+                if let select = displayed.firstIndex(of: card) {displayed[select].isSelected.toggle()}
+                
+                if (selected.count >= 3 && setFormed(selected[0], selected[1], selected[2])) {
+                    for card in selected.prefix(3) {
+                        if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
+                            displayed[matched].isMatched = true
+                        }
+                    }
+                    if(selected.count == 4) {
+                        for card in selected.prefix(3) {
+                            if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
+                                matchPile.append(displayed.remove(at: matched))
                             }
                         }
-                        removeCards(cardsMatched[cardsMatched.count - 1],
-                                            cardsMatched[cardsMatched.count - 2], cardsMatched[cardsMatched.count - 3])
-                        currentlySelected.removeFirst(3)
-                    
-                }
-                else if(!setFormed() && currentlySelected.count == 4) {
-                    currentlySelected.prefix(3).forEach { card in
-                        deselect(card)
+                        selected.removeFirst(3)
                     }
                 }
-            }
-        }
-    }
-    
-    //deselects the card and removes it from the cardsCurrently selected array
-    mutating func deselect(_ card: Card) {
-            if let cardIndexToDeselect = 
-                cardsCurrentlyDealt.firstIndex (where: {$0.id == card.id}) {
-                cardsCurrentlyDealt[cardIndexToDeselect].isSelected.toggle()
-                if let cardToRemoveFromSelected = 
-                    currentlySelected.firstIndex(where: {$0.id == card.id}) {
-                    currentlySelected.remove(at: cardToRemoveFromSelected)
-                }
-            }
-    }
-    
-    //replaces three cards
-    mutating func removeCards(_ card1: Card, _ card2: Card, _ card3: Card) {
-           let cardsToReplace = [card1, card2, card3]
-         
-               cardsToReplace.forEach { card in
-                   if let indexToRemove = 
-                        cardsCurrentlyDealt.firstIndex(where: { $0.id == card.id }) {
-                       cardsCurrentlyDealt.remove(at: indexToRemove)
-                   }
-               }
-       }
-    
-    mutating func replaceCards(_ card1: Card, _ card2: Card, _ card3: Card) {
-        let cardsToReplace = [card1, card2, card3]
-        
-        if cardDeck.count != 0 {
-            cardsToReplace.forEach { card in
-                if let indexToReplace = 
-                    cardsCurrentlyDealt.firstIndex(where: { $0.id == card.id }) {
-                    if !cardDeck.isEmpty {
-                        cardsCurrentlyDealt[indexToReplace] = cardDeck.removeFirst()
-                        cardsCurrentlyDealt[indexToReplace].isDealt = true
+                else if (selected.count == 4 && !setFormed(selected[0], selected[1], selected[2])) {
+                    for card in selected.prefix(3) {
+                        if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
+                            displayed[matched].isSelected.toggle()
+                        }
                     }
+                    selected.removeFirst(3)
                 }
             }
-        }
     }
-    
+ 
     //generic function that will compare three equatables, will return true if all values are the same
     //or if all are different
     func isSet<T: Equatable> (_ a: T, _ b: T, _ c: T) -> Bool {
@@ -156,31 +120,34 @@ struct SetModel {
     }
     
     //will check if set is formed from all cards currently selected
-    mutating func setFormed() -> Bool {
-        guard currentlySelected.count >= 3 else {return false}
-                
-            let (first, second, third) = (currentlySelected[0], currentlySelected[1], currentlySelected[2])
+    func setFormed(_ first: Card, _ second: Card, _ third : Card) -> Bool {
+        guard selected.count >= 3 else {return false}
             
             return setShape(first, second, third) && setShade(first, second, third) 
                 && setColor(first, second, third) && setNumShape(first, second, third)
     }
     
-    //Not done yet, deal cards
-    mutating func dealCards() {
-        if(!cardDeck.isEmpty) {
-            if (currentlySelected.count < 3 || !setFormed()) {
-                (1...3).forEach { _ in
-                    cardDeck[0].isDealt = true
-                    if let indexInAllCards = allCards.firstIndex(where: {cardDeck[0].id == $0.id}) {
-                        allCards[indexInAllCards].isDealt = true
-                    }
-                    cardsCurrentlyDealt.append(cardDeck[0])
-                    cardDeck.removeFirst()
+    mutating func deal() {
+        guard !deck.isEmpty else {return}
+
+        if(selected.count == 3 && setFormed(selected[0], selected[1], selected[2])) {
+            let replacements = Array(deck.prefix(3))
+            deck.removeFirst(3)
+            for index in (0...2) {
+                if let replacing = displayed.firstIndex(where: {selected[index].id == $0.id}) {
+                    matchPile.append(displayed.remove(at: replacing))
+                    displayed[replacing] = replacements[index]
+                    displayed[replacing].isDealt = true
                 }
             }
-            else if (setFormed()) {
-                replaceCards(currentlySelected[0],currentlySelected[1], currentlySelected[2])
-                currentlySelected.removeFirst(3)
+            selected = []
+        }
+        else if(selected.count < 3 || !setFormed(selected[0], selected[1], selected[2])) {
+            let replacements = Array(deck.prefix(3))
+            deck.removeFirst(3)
+            for card in replacements {
+                displayed.append(card)
+                displayed[displayed.count-1].isDealt = true
             }
         }
     }
