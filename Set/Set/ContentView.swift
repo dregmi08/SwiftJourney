@@ -104,9 +104,10 @@ struct ContentView: View {
         }
         .frame(width: 66, height: 100)
         .onAppear {
-            withAnimation {
+            withAnimation(.easeInOut(duration: 0.5)) {
                 for card in viewModel.displayed {
-                    deal(card)
+                        deal(card)
+                        
                 }
             }
         }
@@ -127,7 +128,7 @@ struct ContentView: View {
                     .matchedGeometryEffect(id: "\(card.id)0", in: discardNamespace)
                     .transition(.asymmetric(insertion: .identity , removal: .scale))
             }
-        }                   
+        }
         .frame(width: 66, height: 100)
     }
 }

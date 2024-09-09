@@ -25,23 +25,25 @@ struct CardifySet: ViewModifier {
     
     //shapes : for now, circle, rounded rectangle, diamond
     func body(content: Content) -> some View {
-        let roundedRectangle = RoundedRectangle(cornerRadius: 12.0)
+        let roundedRectangle = RoundedRectangle(cornerRadius: 20.0)
         
         ZStack {
             roundedRectangle
-                .stroke(cardColorDecider(color, isSelected, isMatched), lineWidth: 2)
+                .stroke(cardColorDecider(color, isSelected, isMatched), lineWidth: 5)
+                .blur(radius: isMatched ? 2 : 0) // Bright glowing effect
                 .background(Color.white)
                 .overlay(content)
             roundedRectangle.fill(cardColorDecider(color, isSelected, isMatched)).opacity(isMatched || isDealt ? 0 : 1)
         }
+        .clipShape(RoundedRectangle(cornerRadius: 20))
         .rotationEffect(Angle(degrees: isMatched ? 360 : 0)) // Apply rotation
         .animation(.easeInOut(duration: 1.0), value: isMatched)
         
     }
     
     func cardColorDecider(_ color: Colors, _ isSelected: Bool, _ isMatched: Bool) -> Color {
-       if isMatched {
-            return .green
+     if isMatched {
+            return Color(red: 0.0, green: 0.5, blue: 0.0)
         }
         else if isSelected {
             return .cyan

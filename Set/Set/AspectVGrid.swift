@@ -22,7 +22,7 @@ struct AspectVGrid<Item: Identifiable, ItemView: View> : View {
     var body: some View {
         
         GeometryReader { geometry in
-            let cardWidth = max(70, cardWidthPicker(cardCount: CGFloat(items.count), size: geometry.size, aspectRatio: aspectRatio))
+            let cardWidth = max(60, cardWidthPicker(cardCount: CGFloat(items.count), size: geometry.size, aspectRatio: aspectRatio))
             ScrollView {
                 LazyVGrid (columns: [GridItem(.adaptive(minimum: cardWidth), spacing: 0)], spacing: 0){
                     ForEach(items) { item in
@@ -31,6 +31,9 @@ struct AspectVGrid<Item: Identifiable, ItemView: View> : View {
                             .padding(4)
                     }
                 }
+                .padding(.trailing)
+                .padding(.leading)
+
             }
         }
     }

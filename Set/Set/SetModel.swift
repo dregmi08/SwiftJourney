@@ -25,18 +25,19 @@ struct SetModel {
     enum Shading: Int, CaseIterable {
         case solid, shaded, striped
     }
-   
+    
     init() {
-        for attributeIndex in 1...(Shapes.allCases.count * 
-                                   Colors.allCases.count * Shading.allCases.count) {
+        for attributeIndex in 1...(Shapes.allCases.count * Colors.allCases.count
+                                   * Shading.allCases.count) {
        
             let shapeNum = (attributeIndex % 3) == 0 ? 3 : (attributeIndex % 3)
-            let color = (attributeIndex % 9) < 3 ? Colors.blue : 
+            let color = (attributeIndex % 9) < 3 ? Colors.blue :
                 ((attributeIndex % 9) < 6 ? Colors.green : Colors.pink)
             let shading = (attributeIndex % 27) < 9 ? Shading.solid : 
                 ((attributeIndex % 27) < 18 ? Shading.shaded : Shading.striped)
             
             let (card1, card2, card3) = (Card(id: "\(attributeIndex)a", shape: Shapes.circle, color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)b", shape: Shapes.diamond, color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)c", shape: Shapes.rectangle, color: color, numShapes: shapeNum, shading: shading))
+            
             
             deck.append(card1)
             deck.append(card2)
@@ -65,6 +66,7 @@ struct SetModel {
     mutating func choose(_ card: Card) {            
             if(card.isSelected) {
                 if let unselect = displayed.firstIndex(of: card) {displayed[unselect].isSelected.toggle()}
+                if let removeIdx = selected.firstIndex(of: card) {selected.remove(at: removeIdx)}
             }
             else {
                 selected.append(card)
