@@ -9,10 +9,10 @@ import Foundation
 
 struct SetModel {
     
-    private(set) var deck : [Card] = []
+    private(set) var deck: [Card] = []
     private(set) var displayed : [Card] = []
-    private (set) var selected : [Card] = []
-    private (set) var matchPile : [Card] = []
+    private(set) var selected : [Card] = []
+    private(set) var matchPile : [Card] = []
         
     enum Shapes: Int, CaseIterable {
         case circle, rectangle, diamond
@@ -37,7 +37,6 @@ struct SetModel {
                 ((attributeIndex % 27) < 18 ? Shading.shaded : Shading.striped)
             
             let (card1, card2, card3) = (Card(id: "\(attributeIndex)a", shape: Shapes.circle, color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)b", shape: Shapes.diamond, color: color, numShapes: shapeNum, shading: shading),  Card(id: "\(attributeIndex)c", shape: Shapes.rectangle, color: color, numShapes: shapeNum, shading: shading))
-            
             
             deck.append(card1)
             deck.append(card2)
@@ -64,74 +63,54 @@ struct SetModel {
     }
     
     mutating func choose(_ card: Card) {            
-            if(card.isSelected) {
-                if let unselect = displayed.firstIndex(of: card) {displayed[unselect].isSelected.toggle()}
-                if let removeIdx = selected.firstIndex(of: card) {selected.remove(at: removeIdx)}
-            }
-            else {
-                selected.append(card)
-                if let select = displayed.firstIndex(of: card) {displayed[select].isSelected.toggle()}
+        if(card.isSelected) {
+            if let unselect = displayed.firstIndex(of: card) {displayed[unselect].isSelected.toggle()}
+            if let removeIdx = selected.firstIndex(of: card) {selected.remove(at: removeIdx)}
+        }
+        else {
+            selected.append(card)
+            if let select = displayed.firstIndex(of: card) {displayed[select].isSelected.toggle()}
                 
-                if (selected.count >= 3 && setFormed(selected[0], selected[1], selected[2])) {
-                    for card in selected.prefix(3) {
-                        if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
-                            displayed[matched].isMatched = true
-                        }
-                    }
-                    if(selected.count == 4) {
-                        for card in selected.prefix(3) {
-                            if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
-                                matchPile.append(displayed.remove(at: matched))
-                            }
-                        }
-                        selected.removeFirst(3)
+            if (selected.count >= 3 && setFormed(selected[0], selected[1], selected[2])) {
+                for card in selected.prefix(3) {
+                    if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
+                        displayed[matched].isMatched = true
                     }
                 }
-                else if (selected.count == 4 && !setFormed(selected[0], selected[1], selected[2])) {
+                if(selected.count == 4) {
                     for card in selected.prefix(3) {
                         if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
-                            displayed[matched].isSelected.toggle()
+                            matchPile.append(displayed.remove(at: matched))
                         }
                     }
                     selected.removeFirst(3)
-                }
+                 }
             }
+            else if (selected.count == 4 && !setFormed(selected[0], selected[1], selected[2])) {
+                for card in selected.prefix(3) {
+                    if let matched = displayed.firstIndex(where: {$0.id == card.id}) {
+                        displayed[matched].isSelected.toggle()
+                    }
+                }
+                selected.removeFirst(3)
+            }
+        }
     }
  
-    //generic function that will compare three equatables, will return true if all values are the same
-    //or if all are different
     func isSet<T: Equatable> (_ a: T, _ b: T, _ c: T) -> Bool {
         return !(((a == b  && (b != c)) || (a == c && a != b)) || (b == c && a != c))
     }
-    
-    //helpers for determining all set properties
-    func setShape(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
-        return isSet(card1.shape, card2.shape, card3.shape)
-    }
-    
-    func setShade(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
-        return isSet(card1.shading, card2.shading, card3.shading)
-    }
-    
-    func setColor(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
-        return isSet(card1.color, card2.color, card3.color)
-    }
-    
-    func setNumShape(_ card1: Card, _ card2: Card, _ card3: Card) -> Bool {
-        return isSet(card1.numShapes, card2.numShapes, card3.numShapes)
-    }
-    
-    //will check if set is formed from all cards currently selected
+ 
     func setFormed(_ first: Card, _ second: Card, _ third : Card) -> Bool {
         guard selected.count >= 3 else {return false}
-            
-            return setShape(first, second, third) && setShade(first, second, third) 
-                && setColor(first, second, third) && setNumShape(first, second, third)
+        return isSet(first.shape, second.shape, third.shape)
+                && isSet(first.shading, second.shading, third.shading)
+                    && isSet(first.color, second.color, third.color)
+                        && isSet(first.numShapes, second.numShapes, third.numShapes)
     }
     
     mutating func deal() {
         guard !deck.isEmpty else {return}
-
         if(selected.count == 3 && setFormed(selected[0], selected[1], selected[2])) {
             let replacements = Array(deck.prefix(3))
             deck.removeFirst(3)
