@@ -49,18 +49,22 @@ class EmojiArtDocument: ObservableObject {
         emojiArt.background
     }
     
-    func select(_ emoji: Emoji) {
-        emojiArt.select(emoji)
-    }
-    
     //MARK: - Intents
 
     func setBackground(_ url: URL?) {
         emojiArt.background = url
     }
     
-     func addEmoji(position: Emoji.Position, size: CGFloat, _ emoji : String){
+     func addEmoji(position: CGPoint, size: CGFloat, _ emoji : String){
         emojiArt.addEmoji(position: position, size: Int(size), emoji)
     }
-
+    
+    //get the geometry reader and get the offset to add by, take in emoji
+    func moveEmoji(offset: CGOffset, id: Emoji.ID) {
+        emojiArt.moveEmoji(offset: offset, id: id)
+    }
+    
+    func resizeEmoji( _ pinchScale: CGFloat, _ id: Emoji.ID) {
+        emojiArt.resizeEmoji(pinchScale, id)
+    }
 }

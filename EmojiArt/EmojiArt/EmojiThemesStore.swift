@@ -12,7 +12,6 @@ extension UserDefaults {
         if let jsonData = data(forKey: key),
              let decodedPalettes = try? JSONDecoder().decode([EmojiThemes].self, from: jsonData) {
                 return decodedPalettes
-            
         }
         else {
             return []
@@ -68,8 +67,6 @@ class EmojiThemesStore: ObservableObject {
         return idx
     }
     
-   
-    
     func insert(_ theme: EmojiThemes, at insertionIndex: Int? = nil) { // "at" default is cursorIndex
         let insertionIndex = boundsChecked(insertionIndex ?? correctedCursorIdx)
         if let index = themes.firstIndex(where: { $0.id == theme.id }) {
@@ -100,5 +97,4 @@ class EmojiThemesStore: ObservableObject {
     func append(name: String, emojis: String) {
         append(EmojiThemes(themeName: name, emojis: emojis))
     }
-
 }

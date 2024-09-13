@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ThemesView: View {
+    typealias Emoji = EmojiArt.Emoji
     
     @EnvironmentObject var store: EmojiThemesStore
     
@@ -54,7 +55,6 @@ struct ThemesView: View {
                     ForEach(emojis, id: \.self) { emoji in
                         Text(emoji)
                             .draggable(emoji)
-
                     }
                 }
             }
