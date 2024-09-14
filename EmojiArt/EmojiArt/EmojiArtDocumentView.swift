@@ -171,8 +171,8 @@ struct EmojiArtDocumentView: View {
         let center = geometry.frame(in: .local).center
         return CGPoint (
             x: Int((location.x - center.x - pan.width)/zoomamt),
-            y: Int((-(location.y - center.y - pan.height)/zoomamt))
-        )
+            y: -Int((location.y - center.y - pan.height)/zoomamt))
+        
     }
 }
 
