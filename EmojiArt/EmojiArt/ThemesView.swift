@@ -10,14 +10,28 @@ import SwiftUI
 struct ThemesView: View {
     typealias Emoji = EmojiArt.Emoji
     
-    @EnvironmentObject var store: EmojiThemesStore
+    @EnvironmentObject  var store: EmojiThemesStore
+    
+    @State private var showThemeEditor = false
+    
+    @State private var showThemeList = false
     
     var body: some View {
         HStack {
-            themePicker
+            themePicker 
             view(for: store.themes[store.correctedCursorIdx])
         }
         .clipped()
+        .sheet(isPresented: $showThemeEditor) {
+            ThemeEditor(theme: $store.themes[store.correctedCursorIdx])
+                .font(nil)
+        } 
+        .sheet(isPresented: $showThemeList) {
+            NavigationStack {
+                EditableThemeList(store: store)
+                    .font(nil)
+            }
+        }
     }
     
     var themePicker: some View {
@@ -25,12 +39,38 @@ struct ThemesView: View {
             store._cursorIdx += 1
         }
         .contextMenu {
+            themeMenu
             AnimatedActionButton("New", systemImage: "plus") {
-                store.insert(name: "Math", emojis: "+-=/")
+                store.insert(name: "", emojis: "")
+                showThemeEditor = true
             }
-            AnimatedActionButton("Delete", systemImage: "minus.circle", role:.destructive) {
+            
+            AnimatedActionButton("Delete", systemImage: "minus.circle", role: .destructive) {
                 store.themes.remove(at: store.correctedCursorIdx)
             }
+            
+            AnimatedActionButton("Edit", systemImage: "pencil", role: .destructive) {
+                showThemeEditor = true
+            }
+            
+            AnimatedActionButton("List", systemImage: "list.bullet.rectangle.portrait", role: .destructive) {
+                showThemeList = true
+            }
+        }
+    }
+    
+    private var themeMenu : some View {
+        Menu {
+            ForEach(store.themes) { theme in
+                AnimatedActionButton(theme.themeName) {
+                    if let index = store.themes.firstIndex(where: {theme.id == $0.id}) {
+                        store.correctedCursorIdx  = index
+                    }
+                }
+            }
+        }
+        label : {
+            Label("Go To", systemImage: "text.insert")
         }
     }
     

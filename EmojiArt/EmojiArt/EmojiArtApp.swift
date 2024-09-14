@@ -11,11 +11,14 @@ import SwiftUI
 struct EmojiArtApp: App {
     @StateObject var defaultDocument = EmojiArtDocument()
     @StateObject var store = EmojiThemesStore(themeName: "main")
-    
+    @StateObject var store2 = EmojiThemesStore(themeName: "alternate")
+    @StateObject var store3 = EmojiThemesStore(themeName: "creative")
+
     var body: some Scene {
         WindowGroup {
-            EmojiArtDocumentView(document: defaultDocument)
-                .environmentObject(store)
+            ThemeManager(stores: [store, store2, store3])
+            //EmojiArtDocumentView(document: defaultDocument)
+            .environmentObject(store)
         }
     }
 }

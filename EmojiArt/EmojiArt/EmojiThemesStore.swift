@@ -23,8 +23,20 @@ extension UserDefaults {
     }
 }
 
-class EmojiThemesStore: ObservableObject {
+extension EmojiThemesStore : Hashable {
+    static func == (lhs: EmojiThemesStore, rhs: EmojiThemesStore) -> Bool {
+        lhs.themeName == rhs.themeName
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(themeName)
+    }
+}
+
+class EmojiThemesStore: ObservableObject, Identifiable {
     let themeName: String
+    
+    var id : String {themeName}
     
     private var userDefaultsKey : String {"EmojiThemesStore" + themeName}
 
