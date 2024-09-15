@@ -14,6 +14,11 @@ class EmojiArtDocument: ObservableObject {
     @Published private var emojiArt = EmojiArt() {
         didSet {
             autosave()
+            if emojiArt.background != oldValue.background {
+                Task {
+                    await fetchBackgroundImage()
+                }
+            }
         }
     }
     
@@ -45,8 +50,76 @@ class EmojiArtDocument: ObservableObject {
         emojiArt.emojis
     }
     
-    var background: URL? {
-        emojiArt.background
+//    var background: URL? {
+//        emojiArt.background
+//    }
+    
+    @Published var background: Background = .none
+    
+    //MARK: - Background
+    
+    @MainActor
+    private func fetchBackgroundImage() async {
+        if let url = emojiArt.background {
+            background = .fetching(url)
+            do {
+                let image = try await fetchUIImage(url: url)
+                if (url == emojiArt.background) {
+                    background = .found(image)
+                }
+            }
+            catch {
+                background = .failed("could not find image")
+            }
+        }
+        else {
+            background = .none
+        }
+    }
+    
+    private func fetchUIImage(url: URL) async throws  -> UIImage {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        if let image =  UIImage(data: data) {
+            return image
+        }
+        else {
+            throw FetchError.invalidImageData("image dragged into frame is invalid")
+        }
+        
+    }
+    
+    enum FetchError: Error {
+        case invalidImageData(String)
+    }
+     
+    enum Background {
+        case none
+        case fetching(URL)
+        case found(UIImage)
+        case failed(String)
+        
+        var uiImage: UIImage? {
+            switch self {
+            case .found(let uiImage): return uiImage
+            default: return nil
+            }
+        }
+        
+        var urlBeingFetched: URL? {
+            switch self {
+            case .fetching(let url): return url
+            default: return nil
+            }
+        }
+        
+        var isFetching: Bool { urlBeingFetched != nil }
+        
+        var failureReason: String? {
+            switch self {
+            case .failed(let reason): return reason
+            default: return nil
+            }
+        }
     }
     
     //MARK: - Intents

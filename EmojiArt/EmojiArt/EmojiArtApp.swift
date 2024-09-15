@@ -16,9 +16,10 @@ struct EmojiArtApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ThemeManager(stores: [store, store2, store3])
-            //EmojiArtDocumentView(document: defaultDocument)
-            .environmentObject(store)
+//            ThemeManager(stores: [store, store2, store3])
+                
+            EmojiArtDocumentView(document: defaultDocument)
+                .environmentObject(store)
         }
     }
 }

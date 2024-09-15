@@ -10,7 +10,7 @@ import SwiftUI
 struct ThemesView: View {
     typealias Emoji = EmojiArt.Emoji
     
-    @EnvironmentObject  var store: EmojiThemesStore
+    @EnvironmentObject var store: EmojiThemesStore
     
     @State private var showThemeEditor = false
     
