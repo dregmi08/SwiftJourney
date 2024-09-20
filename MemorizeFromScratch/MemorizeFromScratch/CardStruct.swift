@@ -26,7 +26,7 @@ struct CardStruct: View{
                     .opacity(0.4)
                     .padding(2)
                     .overlay(textContent)
-                    .cardify(isFaceUp: card.isFaceUp, isMatched: card.isMatched, cardColor: card.cardColor)
+                    .cardify(isFaceUp: card.isFaceUp, isMatched: card.isMatched, cardColor: "blue")
                     .transition(.scale)
             }
             else {

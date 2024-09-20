@@ -15,24 +15,22 @@ struct EmojiMemoryGameView: View {
     private let aspectRatio: CGFloat = 2/3
 
     var body: some View {
-        
         VStack {
             Text("Memorize: \(viewModel.themeName) edition")
             
                 .font(.system(size: 25, weight: .bold, design: .rounded))
-                .foregroundColor(themeColorSetter(viewModel.themeColor))
+                .foregroundColor(Color(rgba: viewModel.theme.color))
             
             Text("Score: \(viewModel.score)").animation(nil)
             
                 cards
           
-            HStack{
+            HStack {
                 Button(action: {
                     withAnimation {
                         viewModel.shuffle()
                     }
-                })
-                {
+                }) {
                     Image(systemName: "shuffle.circle")
                 }
                 .font(.largeTitle)
@@ -43,53 +41,26 @@ struct EmojiMemoryGameView: View {
                     withAnimation {
                         viewModel.newGame()
                     }
-                })
-                {
+                }) {
                     Text("New Game")
                 }
-                
             }
         }
         .padding()
-        .foregroundColor(themeColorSetter(viewModel.themeColor))
+        .foregroundColor(Color(rgba: viewModel.theme.color))
         .font(.system(size: 20, weight: .bold, design: .rounded))
-        
     }
     
 
     private var cards : some View {
-        
         AspectVGrid(aspectRatio: aspectRatio, viewModel.cards) { card in
-            if(hasBeenDealt(card: card)) {
-                CardStruct(card)
-                    .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
-                    .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
-                    .onTapGesture {
-                        chooseCardAnimation(card)
-                    }
-                    .transition(.offset(
-                        x: CGFloat.random(in: -1000...1000),
-                        y: CGFloat.random(in: -1000...1000)))
-            }
-         }
-        .onAppear {
-            withAnimation {
-                for card in viewModel.cards {
-                    dealt.insert(card.id)
-                    
+            CardStruct(card)
+                .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
+                .zIndex(scoreChange(causedBy: card) != 0 ? 1 : 0)
+                .onTapGesture {
+                    chooseCardAnimation(card)
                 }
-            }
-        }
-    }
-    
-    @State private var dealt = Set<Card.ID>()
-    
-    private func hasBeenDealt(card : Card) -> Bool {
-        dealt.contains(card.id)
-    }
-    
-    private var unDealtCards : [Card] {
-        viewModel.cards.filter {!hasBeenDealt(card: $0)}
+         }
     }
     
     private func chooseCardAnimation (_ card: Card) {
@@ -109,30 +80,19 @@ struct EmojiMemoryGameView: View {
     }
 }
 
-
-
-
-func themeColorSetter(_ themeCol: String) -> Color {
-     switch themeCol {
-     case "orange":
-         return Color.orange
-     case "green":
-         return Color.green
-     case "purple":
-         return Color.purple
-     case "red":
-         return Color.red
-     case "grey":
-         return Color.gray
-     case "brown":
-         return Color.brown
-     default:
-         return Color.orange
+extension RGBA {
+     init(color: Color) {
+         var red: CGFloat = 0
+         var green: CGFloat = 0
+         var blue: CGFloat = 0
+         var alpha: CGFloat = 0
+         UIColor(color).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+         self.init(red: Double(red * 255), green: Double(green * 255), blue: Double(blue * 255), alpha: Double(alpha))
      }
- }
+}
 
-struct EmojiMemoryGameView_Previews: PreviewProvider {
-    static var previews: some View {
-        EmojiMemoryGameView(viewModel: EmojiMemoryGame())
-    }
+extension Color {
+     init(rgba: RGBA) {
+         self.init(.sRGB, red: rgba.red/255, green: rgba.green/255, blue: rgba.blue/255, opacity: rgba.alpha)
+     }
 }

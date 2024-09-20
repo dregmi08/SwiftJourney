@@ -6,46 +6,31 @@
 //
 
 import Foundation
+import SwiftUI
 
 
 struct MemoryGame<CardContent> where CardContent : Equatable {
-    
-    
-    //what does this thing do
-    
     //store all cards
     private(set) var cards: Array<Card>
     
     private var IndexOfTheOneAndOnlyFaceUpCard: Int?
     //num of card pairs
-    private(set) var themeCol: String
-    
-    private(set) var theme: String
-    
     private(set) var score = 0
     
     private(set) var hasBeenSeen: [Card] = []
     
     private(set) var currentlyFlippedOverandUnmatched: [Card] = []
     
-    init(theme:String, numOfCardPairs: Int, themeCol: String, cardContentFactory: (Int) -> CardContent) {
+    init(numOfCardPairs: Int, cardContentFactory: (Int) -> CardContent) {
         cards = [Card]()
-        self.themeCol = themeCol
-        self.theme = theme
-        for pairIndex in 0..<max(8, numOfCardPairs) {
-            cards.append(Card(content: cardContentFactory(pairIndex), cardColor: themeCol, id: "\(pairIndex+1)a"))
-            cards.append(Card(content: cardContentFactory(pairIndex), cardColor: themeCol, id: "\(pairIndex+1)b"))
+        for pairIndex in (0..<numOfCardPairs) {
+            cards.append(Card(content: cardContentFactory(pairIndex), id: "\(pairIndex+1)a"))
+            cards.append(Card(content: cardContentFactory(pairIndex), id: "\(pairIndex+1)b"))
         }
         cards.shuffle()
     }
-    
-    //choose a card
-    
-    struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         
-        var debugDescription : String {
-            return "\(content), \(id), \(isFaceUp), \(isMatched), \(isAlreadySeen), \(cardColor)"
-        }
+    struct Card: Equatable, Identifiable {
         let content: CardContent
         var isFaceUp = false {
             didSet {
@@ -60,7 +45,6 @@ struct MemoryGame<CardContent> where CardContent : Equatable {
                 }
             }
         }
-        var cardColor: String
         let id: String
         var isMatched  = false {
             didSet {

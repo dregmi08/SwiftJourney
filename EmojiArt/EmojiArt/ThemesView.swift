@@ -101,6 +101,7 @@ struct ThemesView: View {
         }
     }
 }
+
 #Preview {
     ThemesView()
         .environmentObject(EmojiThemesStore(themeName: "Preview"))

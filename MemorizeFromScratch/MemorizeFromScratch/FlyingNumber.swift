@@ -28,11 +28,6 @@ struct FlyingNumber: View {
                 .onDisappear() {
                     offset = 0
                 }
-    
         }
     }
-}
-
-#Preview {
-    FlyingNumber(number: 5)
 }

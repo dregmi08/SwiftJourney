@@ -70,9 +70,4 @@ struct ThemeEditor: View {
         }
         .font(emojiFont)
     }
-    
 }
-
-//#Preview {
-//    ThemeEditor()
-//}

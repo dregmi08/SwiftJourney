@@ -7,9 +7,7 @@
 
 import SwiftUI
 
-struct AspectVGrid<Item: Identifiable, ItemView: View> : View{
- 
-    
+struct AspectVGrid<Item: Identifiable, ItemView: View> : View {
   
     let aspectRatio: CGFloat
     var items: [Item]
@@ -55,6 +53,4 @@ struct AspectVGrid<Item: Identifiable, ItemView: View> : View{
             } while columnCount < cardCount
             return min(size.width/cardCount, size.height * aspectRatio).rounded(.down)
         }
-        
-        
     }

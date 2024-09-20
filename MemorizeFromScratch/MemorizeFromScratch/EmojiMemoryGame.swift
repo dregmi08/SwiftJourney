@@ -8,79 +8,35 @@
 import SwiftUI
 
 class EmojiMemoryGame : ObservableObject {
+    
     typealias Card = MemoryGame<String>.Card
-
-    private static let themeAttributes = [
-        Theme(name: "Halloween",
-              color: "orange",
-              emojiSet:  ["👻", "🎃", "🕷️", "😈", 
-                          "💀", "🕸️", "🧙🏽", "🙀",
-                          "👹", "😱", "☠️", "🍭"],
-              numPairs: 12),
-        
-        Theme(name: "Nature",
-              color: "green",
-              emojiSet: ["🌲", "🌳", "🌴", "🌵", 
-                         "🌷", "🌸", "🌹", "🌻",
-                         "🌼", "🌺", "🍁", "🍃"],
-              numPairs: 12),
-        
-        Theme(name: "Music",
-              color: "purple",
-              emojiSet: [ "🎵", "🎶", "🎼", "🎹",
-                          "🎷", "🎸", "🎺", "🎻",
-                          "🥁", "🎤", "🎧", "📯"],
-              numPairs: 12),
-        
-        Theme(name: "Travel",
-              color: "red",
-              emojiSet: [ "✈️", "🚂", "🚗", "🚢",
-                          "🏖️", "🏝️", "🗽", "🗼",
-                          "🗺️", "🏔️", "🛳️", "🧳"],
-              numPairs: 12),
-        
-        Theme(name: "Tech",
-              color: "grey",
-              emojiSet: [ "💻", "🖥️", "📱", "⌨️",
-                          "🖱️", "🖲️", "💾", "📡",
-                          "🔋", "📷", "🎥", "🕹️"],
-             numPairs: 12),
-        
-        Theme(name: "Animals",
-              color: "brown",
-              emojiSet: [ "🐶", "🐱", "🐭", "🐹",
-                          "🐰", "🦊", "🐸", "🦄",
-                          "🦉", "🐨", "🐯", "🦁"],
-             numPairs: 12)
-    ]
+    var theme: Theme
     
+    @Published private var model : MemoryGame<String>
     
-
-    private static func createMemoryGame( _ new_theme: Theme) -> MemoryGame<String> {
-        let numShownPairs = Int.random(in: 8...new_theme.emojiSet.count)
-        return  MemoryGame(theme: new_theme.name, numOfCardPairs: numShownPairs, themeCol: currTheme!.color) { pairIndex in
-            if new_theme.emojiSet.indices.contains(pairIndex) {
-                return new_theme.emojiSet[pairIndex]
-            }
-            else {
-                return "﹖﹗"
+    init(_ gameTheme: Theme) {
+        theme = gameTheme
+        model = EmojiMemoryGame.createMemoryGame(gameTheme)
+    }
+    
+    private static func createMemoryGame(_ theme: Theme) -> MemoryGame<String> {
+        let emojiArr = Array(theme.emojiSet)
+        
+        return MemoryGame(numOfCardPairs: theme.numOfPairs) { pairIndex in
+            if emojiArr.indices.contains(pairIndex) {
+                return String(emojiArr[pairIndex]) // Convert Character to String
+            } else {
+                return "﹖﹗" // Fallback emoji
             }
         }
     }
-    
-    static var currTheme = themeAttributes.randomElement()
-    @Published private var model = createMemoryGame(currTheme!)
     
     var cards: Array<Card> {
         return model.cards
     }
    
     var themeName: String {
-        return EmojiMemoryGame.currTheme!.name
-    }
-    
-    var themeColor: String {
-        return EmojiMemoryGame.currTheme!.color
+        return theme.name
     }
     
     var score: Int { model.score }
@@ -91,8 +47,7 @@ class EmojiMemoryGame : ObservableObject {
     }
     
     func newGame() {
-        EmojiMemoryGame.currTheme = EmojiMemoryGame.themeAttributes.randomElement()
-        model = EmojiMemoryGame.createMemoryGame(EmojiMemoryGame.currTheme!)
+        model = EmojiMemoryGame.createMemoryGame(theme)
     }
 
     func choose(_ card: Card){

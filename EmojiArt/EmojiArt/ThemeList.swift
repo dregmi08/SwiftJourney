@@ -10,6 +10,7 @@ struct EditableThemeList: View {
     
     @ObservedObject var store : EmojiThemesStore
     @State private var showCursorPalette = false
+    
     var body: some View {
             List {
                 ForEach (store.themes) { theme in
@@ -31,12 +32,11 @@ struct EditableThemeList: View {
             }
             .navigationDestination(for: EmojiThemes.ID.self) { theme in
                 if let index = store.themes.firstIndex(where: {theme == $0.id}) {
-                    ThemeEditor(theme: $store.themes[index] )
+                    ThemeEditor(theme: $store.themes[index])
                 }
             }
             .navigationDestination(isPresented: $showCursorPalette) {
-                ThemeEditor(theme: $store.themes[store.correctedCursorIdx] )
-
+                ThemeEditor(theme: $store.themes[store.correctedCursorIdx])
             }
             .navigationTitle("\(store.themeName) themes")
             .toolbar {
@@ -74,7 +74,3 @@ struct EmojiThemesView : View {
         .navigationTitle(theme.themeName)
     }
 }
-
-//#Preview {
-//    ThemeList()
-//}

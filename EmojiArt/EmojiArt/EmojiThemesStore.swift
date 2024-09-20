@@ -11,7 +11,7 @@ extension UserDefaults {
     func themes(forKey key : String) -> [EmojiThemes] {
         if let jsonData = data(forKey: key),
              let decodedPalettes = try? JSONDecoder().decode([EmojiThemes].self, from: jsonData) {
-                return decodedPalettes
+                 return decodedPalettes
         }
         else {
             return []

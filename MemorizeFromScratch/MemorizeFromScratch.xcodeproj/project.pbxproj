@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24295CE02C9AA87400A6D40A /* ThemeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24295CDF2C9AA87400A6D40A /* ThemeEditor.swift */; };
 		243C1D3E2C52EB9600ECAB2F /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 243C1D3D2C52EB9600ECAB2F /* Theme.swift */; };
+		24B6294F2C96A30500A056C0 /* ThemeStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B6294E2C96A30400A056C0 /* ThemeStoreView.swift */; };
+		24B629512C96B0CA00A056C0 /* ThemeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B629502C96B0CA00A056C0 /* ThemeStore.swift */; };
 		24BC7C5D2C7EF8CE00999B7D /* FlyingNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24BC7C5C2C7EF8CE00999B7D /* FlyingNumber.swift */; };
 		24CE234D2C5E25C7006540F7 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */; };
 		24CE23532C5F3B94006540F7 /* CardStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24CE23522C5F3B94006540F7 /* CardStruct.swift */; };
@@ -22,7 +25,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		24295CDF2C9AA87400A6D40A /* ThemeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeEditor.swift; sourceTree = "<group>"; };
 		243C1D3D2C52EB9600ECAB2F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		24B6294E2C96A30400A056C0 /* ThemeStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStoreView.swift; sourceTree = "<group>"; };
+		24B629502C96B0CA00A056C0 /* ThemeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeStore.swift; sourceTree = "<group>"; };
 		24BC7C5C2C7EF8CE00999B7D /* FlyingNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlyingNumber.swift; sourceTree = "<group>"; };
 		24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
 		24CE23522C5F3B94006540F7 /* CardStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardStruct.swift; sourceTree = "<group>"; };
@@ -76,6 +82,9 @@
 				24CE23542C5F6296006540F7 /* Pie.swift */,
 				24CE234C2C5E25C7006540F7 /* AspectVGrid.swift */,
 				24FF93592C39022100354F25 /* MemoryGame.swift */,
+				24B6294E2C96A30400A056C0 /* ThemeStoreView.swift */,
+				24295CDF2C9AA87400A6D40A /* ThemeEditor.swift */,
+				24B629502C96B0CA00A056C0 /* ThemeStore.swift */,
 				24FF935B2C39191600354F25 /* EmojiMemoryGame.swift */,
 				24FF93472C2BFF3400354F25 /* Assets.xcassets */,
 				24FF93492C2BFF3400354F25 /* Preview Content */,
@@ -162,11 +171,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				24FF93462C2BFF3200354F25 /* EmojiMemoryGameView.swift in Sources */,
+				24295CE02C9AA87400A6D40A /* ThemeEditor.swift in Sources */,
+				24B6294F2C96A30500A056C0 /* ThemeStoreView.swift in Sources */,
 				24FF93442C2BFF3200354F25 /* MemorizeFromScratchApp.swift in Sources */,
 				24CE23552C5F6296006540F7 /* Pie.swift in Sources */,
 				24CE23572C5F725F006540F7 /* Cardify.swift in Sources */,
 				24CE234D2C5E25C7006540F7 /* AspectVGrid.swift in Sources */,
 				24CE23532C5F3B94006540F7 /* CardStruct.swift in Sources */,
+				24B629512C96B0CA00A056C0 /* ThemeStore.swift in Sources */,
 				243C1D3E2C52EB9600ECAB2F /* Theme.swift in Sources */,
 				24FF935A2C39022100354F25 /* MemoryGame.swift in Sources */,
 				24FF935C2C39191600354F25 /* EmojiMemoryGame.swift in Sources */,
