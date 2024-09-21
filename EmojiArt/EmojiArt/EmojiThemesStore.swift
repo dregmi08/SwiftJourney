@@ -62,6 +62,17 @@ class EmojiThemesStore: ObservableObject, Identifiable {
                 themes = [EmojiThemes(themeName: "warning", emojis: "⁉️")]
             }
         }
+        observer = NotificationCenter.default.addObserver(forName: UserDefaults.didChangeNotification, object: nil, queue: .main) { [weak self] notification in
+            self?.objectWillChange.send()
+        }
+    }
+    
+    @State private var observer: NSObjectProtocol?
+    
+    deinit {
+        if let observer {
+            NotificationCenter.default.removeObserver(observer)
+        }
     }
     
     @Published var _cursorIdx: Int = 0

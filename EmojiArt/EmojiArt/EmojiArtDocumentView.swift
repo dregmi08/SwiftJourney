@@ -9,12 +9,17 @@ import SwiftUI
 
 struct EmojiArtDocumentView: View {
     
+    @StateObject var store = EmojiThemesStore(themeName: "main")
+    
+    @Environment(\.undoManager) var undoManager
+    
     @ObservedObject var document = EmojiArtDocument()
     @State var emojiSelected =  Set<Emoji.ID>()
 
     typealias Emoji = EmojiArt.Emoji
     
-    private let emojiSize: CGFloat = 40
+    @ScaledMetric private var emojiSize: CGFloat = 40
+    
     var body: some View {
         VStack(spacing: 0) {
             documentBody
@@ -26,7 +31,9 @@ struct EmojiArtDocumentView: View {
                 .padding(.horizontal)
                 .scrollIndicators(.hidden)
         }
+        .environmentObject(store)
     }
+
     
     private var documentBody : some View {
         GeometryReader { geometry in
@@ -137,7 +144,7 @@ struct EmojiArtDocumentView: View {
             }
             .onEnded { finalPinchAmt in
                 for id in emojiSelected {
-                    document.resizeEmoji(finalPinchAmt, id)
+                    document.resizeEmoji(finalPinchAmt, id, undoWith: undoManager)
                 }
             }
     }
@@ -157,10 +164,10 @@ struct EmojiArtDocumentView: View {
         for sturldata in sturldatas {
             switch sturldata {
             case .url(let url):
-                document.setBackground(url)
+                document.setBackground(url, undoWith: undoManager)
                 return true
             case .string(let emoji):
-                document.addEmoji(position: emojiPosition(location, geometry), size: emojiSize, emoji)
+                document.addEmoji(position: emojiPosition(location, geometry), size: emojiSize, emoji, undoWith: undoManager)
                 return true
             default:
                 break
@@ -190,7 +197,7 @@ struct EmojiArtDocumentView: View {
             .onEnded { value in
                 for id in emojiSelected {
                     emojiPan = value.translation
-                    document.moveEmoji(offset: emojiPan, id: id)
+                    document.moveEmoji(offset: emojiPan, id: id, undoWith: undoManager)
                 }
             }
     }

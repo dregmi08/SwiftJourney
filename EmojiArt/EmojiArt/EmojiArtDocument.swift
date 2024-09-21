@@ -6,14 +6,39 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
-class EmojiArtDocument: ObservableObject {
+extension UTType {
+    static let emojiart = UTType(importedAs: "edu.ucsd.emojiart")
+}
+
+class EmojiArtDocument: ObservableObject, ReferenceFileDocument {
+    func snapshot(contentType: UTType) throws -> Data {
+        try emojiArt.json()
+    }
+    
+    func fileWrapper(snapshot: Data, configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: snapshot)
+    }
+    
+    static var readableContentTypes: [UTType] {
+        [.emojiart]
+    }
+    
+    required init(configuration: ReadConfiguration) throws {
+        if let data = configuration.file.regularFileContents {
+            emojiArt = try EmojiArt(json: data)
+        }
+        else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+    }
+    
     
     typealias Emoji = EmojiArt.Emoji
     
     @Published private var emojiArt = EmojiArt() {
         didSet {
-            autosave()
             if emojiArt.background != oldValue.background {
                 Task {
                     await fetchBackgroundImage()
@@ -22,37 +47,19 @@ class EmojiArtDocument: ObservableObject {
         }
     }
     
-    private let autosaveURL : URL = URL.documentsDirectory.appendingPathComponent("Autosaved.emojiArt")
     
-    private func autosave() {
-        save(to: autosaveURL)
-        print("\(autosaveURL)")
-    }
-    
-    private func save(to url: URL) {
-        do {
-            let data = try emojiArt.json()
-            try data.write(to: url)
-        }
-        catch let error {
-            print("EmojiArtDocument: error while saving \(error.localizedDescription)")
-        }
-    }
     
     init () {
-        if let data = try? Data(contentsOf: autosaveURL),
-           let autosavedEmojiArt = try? EmojiArt(json: data){
-            emojiArt = autosavedEmojiArt
-        }
+        
     }
     
     var emojis : [Emoji] {
         emojiArt.emojis
     }
     
-//    var background: URL? {
-//        emojiArt.background
-//    }
+    //    var background: URL? {
+    //        emojiArt.background
+    //    }
     
     @Published var background: Background = .none
     
@@ -91,7 +98,7 @@ class EmojiArtDocument: ObservableObject {
     enum FetchError: Error {
         case invalidImageData(String)
     }
-     
+    
     enum Background {
         case none
         case fetching(URL)
@@ -123,21 +130,40 @@ class EmojiArtDocument: ObservableObject {
     }
     
     //MARK: - Intents
-
-    func setBackground(_ url: URL?) {
-        emojiArt.background = url
+    
+    func setBackground(_ url: URL?, undoWith undoManager: UndoManager? = nil) {
+        performUndo(operation: "Set the Background", with: undoManager) {
+            emojiArt.background = url
+        }
     }
     
-     func addEmoji(position: CGPoint, size: CGFloat, _ emoji : String){
-        emojiArt.addEmoji(position: position, size: Int(size), emoji)
+    func addEmoji(position: CGPoint, size: CGFloat, _ emoji : String, undoWith undoManager: UndoManager? = nil){
+        performUndo(operation: "Add Emoji", with: undoManager) {
+            emojiArt.addEmoji(position: position, size: Int(size), emoji)
+        }
     }
     
     //get the geometry reader and get the offset to add by, take in emoji
-    func moveEmoji(offset: CGOffset, id: Emoji.ID) {
-        emojiArt.moveEmoji(offset: offset, id: id)
+    func moveEmoji(offset: CGOffset, id: Emoji.ID, undoWith undoManager: UndoManager? = nil) {
+        performUndo(operation: "Move Emoji", with: undoManager) {
+            emojiArt.moveEmoji(offset: offset, id: id)
+        }
     }
     
-    func resizeEmoji( _ pinchScale: CGFloat, _ id: Emoji.ID) {
-        emojiArt.resizeEmoji(pinchScale, id)
+    func resizeEmoji( _ pinchScale: CGFloat, _ id: Emoji.ID, undoWith undoManager: UndoManager? = nil) {
+        performUndo(operation: "Resize Emoji", with: undoManager) {
+            emojiArt.resizeEmoji(pinchScale, id)
+        }
     }
+    
+    private func performUndo(operation: String, with undoManager: UndoManager? = nil, doit: () -> Void) {
+            let oldEmojiArt = emojiArt
+            doit()
+            undoManager?.registerUndo(withTarget: self) { myself in
+                myself.performUndo(operation: operation, with: undoManager) {
+                    myself.emojiArt = oldEmojiArt
+                }
+            }
+            undoManager?.setActionName(operation)
+        }
 }
